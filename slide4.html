@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 4 - Why WhatsApp</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --neon-green: #00e676;
+            --neon-red: #ff3333;
+            --tape-yellow: #f0e68c;
+            --card-bg: rgba(20, 20, 20, 0.9);
+            --font-head: 'Anton', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #0d0d0d;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            font-family: var(--font-tech);
+            color: #fff;
+        }
+
+        .slide-frame {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- BACKGROUND DECOR --- */
+        .bg-radar {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 80vh; height: 80vh;
+            border: 1px dashed rgba(0, 230, 118, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        
+        .bg-radar::before {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 100%; height: 1px;
+            background: rgba(0, 230, 118, 0.1);
+            transform: translate(-50%, -50%);
+        }
+        .bg-radar::after {
+            content: '';
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 1px; height: 100%;
+            background: rgba(0, 230, 118, 0.1);
+            transform: translate(-50%, -50%);
+        }
+
+        /* --- HEADER --- */
+        .header-section {
+            padding: 3vh 5vw;
+            z-index: 10;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .main-title {
+            font-family: var(--font-head);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            text-transform: uppercase;
+            line-height: 1;
+        }
+
+        .tape-highlight {
+            background-color: var(--tape-yellow);
+            color: #000;
+            padding: 5px 15px;
+            font-size: 1rem;
+            transform: rotate(-2deg);
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        /* --- GRID SYSTEM --- */
+        .analysis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            gap: 2rem;
+            padding: 2vh 5vw 8vh 5vw;
+            flex-grow: 1;
+            z-index: 10;
+        }
+
+        /* --- TACTICAL CARD STYLE --- */
+        .tactical-card {
+            background: var(--card-bg);
+            border: 1px solid #333;
+            border-left: 4px solid var(--neon-green); /* Indikator aman */
+            padding: 25px;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            transition: all 0.3s ease;
+        }
+
+        .tactical-card:hover {
+            background: rgba(0, 230, 118, 0.05);
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.1);
+            transform: scale(1.01);
+        }
+
+        /* Corner Brackets for HUD feel */
+        .tactical-card::before {
+            content: ''; position: absolute; top: -1px; right: -1px; 
+            width: 20px; height: 20px; 
+            border-top: 2px solid var(--neon-green); 
+            border-right: 2px solid var(--neon-green);
+        }
+        .tactical-card::after {
+            content: ''; position: absolute; bottom: -1px; right: -1px; 
+            width: 20px; height: 20px; 
+            border-bottom: 2px solid var(--neon-green); 
+            border-right: 2px solid var(--neon-green);
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            color: var(--neon-green);
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .card-head {
+            font-family: var(--font-head);
+            font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+            color: #fff;
+        }
+
+        .card-desc {
+            font-size: clamp(0.9rem, 1.2vw, 1.1rem);
+            color: #ccc;
+            line-height: 1.5;
+            max-width: 90%;
+        }
+
+        /* Specific modifications per card */
+        .card-desc b { color: var(--neon-green); }
+
+        /* --- STICKY NOTE (Extra Detail) --- */
+        .note-element {
+            position: absolute;
+            bottom: -15px;
+            right: 20px;
+            background: var(--paper-white);
+            color: #000;
+            padding: 10px 15px;
+            font-family: var(--font-hand);
+            font-weight: bold;
+            font-size: 1.2rem;
+            transform: rotate(-5deg);
+            box-shadow: 3px 3px 8px rgba(0,0,0,0.5);
+            z-index: 20;
+        }
+        
+        .note-element::before {
+             content: ''; position: absolute; top: -8px; left: 40%; width: 40px; height: 20px;
+             background: rgba(255,255,255,0.4); transform: rotate(3deg);
+        }
+
+        /* --- FOOTER --- */
+        .hud-footer {
+            height: 50px;
+            background: rgba(0,0,0,0.9);
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3vw;
+            z-index: 100;
+            margin-top: auto;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .analysis-grid {
+                grid-template-columns: 1fr; /* Stack cards */
+                grid-template-rows: auto;
+                padding-bottom: 20px;
+                overflow-y: auto;
+                gap: 1.5rem;
+            }
+            .header-section { flex-direction: column; align-items: flex-start; }
+            .bg-radar { width: 90vw; height: 90vw; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame">
+        <div class="bg-radar"></div>
+
+        <div class="header-section">
+            <div>
+                <div style="color: #666; font-size: 0.9rem; letter-spacing: 2px; margin-bottom: 5px;">
+                    <i class="ri-eye-2-line"></i> CHANNEL ANALYSIS
+                </div>
+                <h1 class="main-title">THE POWER OF<br><span style="color: var(--neon-green);">WHATSAPP AUTOMATION</span></h1>
+            </div>
+            <div class="tape-highlight">
+                TOP SECRET: STRATEGY
+            </div>
+        </div>
+
+        <div class="analysis-grid">
+
+            <div class="tactical-card">
+                <i class="ri-shake-hands-fill card-icon"></i>
+                <h2 class="card-head">PERSONAL TOUCH</h2>
+                <p class="card-desc">
+                    Membangun hubungan yang lebih luwes, akrab, dan manusiawi. Kreator merasa dihargai sebagai partner, bukan sekadar angka.
+                </p>
+            </div>
+
+            <div class="tactical-card">
+                <i class="ri-mail-check-fill card-icon"></i>
+                <h2 class="card-head">HIGH RESPONSE RATE</h2>
+                <p class="card-desc">
+                    Notifikasi WA punya prioritas psikologis. Pesan <b>hampir pasti dibaca</b> dibandingkan DM TikTok yang sering masuk folder "Request" tersembunyi.
+                </p>
+                <div class="note-element">
+                    Read Rate > 90%
+                </div>
+            </div>
+
+            <div class="tactical-card">
+                <i class="ri-database-lock-fill card-icon"></i>
+                <h2 class="card-head">ASET JANGKA PANJANG</h2>
+                <p class="card-desc">
+                    Memiliki database No. HP berarti memegang <b>Kendali Penuh</b> (Own the Audience). Tidak bergantung pada algoritma platform lain.
+                </p>
+            </div>
+
+            <div class="tactical-card">
+                <i class="ri-shield-keyhole-fill card-icon"></i>
+                <h2 class="card-head">RISK FREE & SECURE</h2>
+                <p class="card-desc">
+                    Bebas dari risiko <b>shadowban</b> atau limitasi pesan harian yang ketat seperti di DM TikTok. Jalur komunikasi selalu terbuka.
+                </p>
+            </div>
+
+        </div>
+
+        <div class="hud-footer">
+            <div style="color: var(--neon-green); font-size: 0.9rem; letter-spacing: 2px;">
+                <i class="ri-wifi-fill"></i> CONNECTION SECURE
+            </div>
+            <div style="font-size: 1.2rem; color: #555;">
+                SLIDE_04 // ANALYSIS
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

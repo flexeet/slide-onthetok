@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 5 - Strategy Shift</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --neon-green: #00e676;
+            --neon-red: #ff3333;
+            --tape-yellow: #f0e68c;
+            --paper-white: #f5f5f5;
+            --font-head: 'Anton', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #0d0d0d;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            font-family: var(--font-tech);
+            color: #fff;
+        }
+
+        /* --- LAYOUT STRUCTURE --- */
+        .slide-frame {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            position: relative;
+            display: grid;
+            grid-template-rows: auto 1fr auto; /* Header - Content - Footer */
+        }
+
+        /* --- BACKGROUND (WAJIB ADA GRID) --- */
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            /* Grid Pattern yang lebih tegas */
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 40%, #000000 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- HEADER --- */
+        .header-section {
+            padding: 3vh 5vw;
+            z-index: 10;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            background: rgba(0,0,0,0.6);
+        }
+
+        .main-title {
+            font-family: var(--font-head);
+            font-size: clamp(2rem, 4vw, 3.5rem);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .subtitle-tech {
+            color: #888;
+            font-size: 1rem;
+            letter-spacing: 4px;
+            margin-bottom: 5px;
+        }
+
+        /* --- CONTENT COMPARISON GRID --- */
+        .comparison-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            padding: 2rem 5vw;
+            gap: 3rem;
+            z-index: 10;
+            position: relative;
+        }
+
+        /* VERTICAL DIVIDER LINE */
+        .comparison-container::before {
+            content: 'VS';
+            position: absolute;
+            left: 50%; top: 50%;
+            transform: translate(-50%, -50%);
+            background: #000;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 10px;
+            border-radius: 50%;
+            font-family: var(--font-head);
+            font-size: 1.5rem;
+            z-index: 20;
+        }
+        .comparison-container::after {
+            content: '';
+            position: absolute;
+            left: 50%; top: 2rem; bottom: 2rem;
+            width: 2px;
+            background: repeating-linear-gradient(to bottom, #444 0, #444 10px, transparent 10px, transparent 20px);
+            z-index: 1;
+        }
+
+        /* CARD STYLES */
+        .strategy-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding: 20px;
+            border-radius: 4px;
+            background: rgba(0,0,0,0.3);
+            border: 1px solid #333;
+            position: relative;
+        }
+
+        .col-title {
+            font-family: var(--font-head);
+            font-size: 2rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            border-bottom: 2px solid;
+            padding-bottom: 5px;
+            width: 100%;
+            text-align: center;
+        }
+
+        /* FLOWCHART STEPS */
+        .flow-step {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            width: 100%;
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            margin-bottom: 15px;
+            border-left: 4px solid #555;
+        }
+
+        .flow-icon { font-size: 1.8rem; }
+        .flow-text { font-size: 1.1rem; }
+
+        .arrow-down {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+
+        /* --- OLD WAY (RED) --- */
+        .strategy-col.old {
+            border-color: rgba(255, 51, 51, 0.3);
+        }
+        .strategy-col.old .col-title { color: var(--neon-red); border-color: var(--neon-red); }
+        .strategy-col.old .flow-step { border-left-color: var(--neon-red); }
+        .strategy-col.old .flow-icon { color: var(--neon-red); }
+
+        .stamp-fail {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%) rotate(-15deg);
+            border: 4px solid var(--neon-red);
+            color: var(--neon-red);
+            font-family: var(--font-head);
+            font-size: 3rem;
+            padding: 10px 20px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        /* --- NEW WAY (GREEN) --- */
+        .strategy-col.new {
+            border-color: rgba(0, 230, 118, 0.3);
+            background: rgba(0, 230, 118, 0.02);
+            box-shadow: 0 0 20px rgba(0, 230, 118, 0.05);
+        }
+        .strategy-col.new .col-title { color: var(--neon-green); border-color: var(--neon-green); }
+        .strategy-col.new .flow-step { border-left-color: var(--neon-green); }
+        .strategy-col.new .flow-icon { color: var(--neon-green); }
+        
+        .result-box {
+            margin-top: 10px;
+            background: var(--neon-green);
+            color: #000;
+            padding: 10px 20px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            transform: skew(-10deg);
+        }
+
+        /* --- BOTTOM NOTE (CONCLUSION) --- */
+        .conclusion-section {
+            padding: 20px 5vw 40px 5vw;
+            display: flex;
+            justify-content: center;
+            z-index: 10;
+        }
+
+        .paper-note {
+            background: var(--paper-white);
+            color: #222;
+            padding: 20px 40px;
+            transform: rotate(-1deg);
+            font-family: var(--font-hand);
+            font-size: 1.6rem;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            max-width: 800px;
+            text-align: center;
+            position: relative;
+        }
+
+        /* Tape on note */
+        .paper-note::before {
+            content: '';
+            position: absolute;
+            top: -15px; left: 50%;
+            width: 100px; height: 35px;
+            background: rgba(255, 255, 255, 0.3);
+            border: 1px solid rgba(255,255,255,0.5);
+            transform: translateX(-50%) rotate(2deg);
+        }
+
+        /* Pin */
+        .paper-note::after {
+            content: '\F32C'; /* Remix Icon Code for Pushpin */
+            font-family: 'remixicon';
+            position: absolute;
+            top: -25px; right: -10px;
+            color: var(--neon-red);
+            font-size: 2rem;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+
+        /* --- HUD FOOTER --- */
+        .hud-footer {
+            height: 40px;
+            background: rgba(0,0,0,0.8);
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding: 0 20px;
+            z-index: 100;
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .comparison-container { grid-template-columns: 1fr; gap: 2rem; }
+            .comparison-container::after { display: none; } /* Hide vertical line */
+            .comparison-container::before { display: none; } /* Hide VS */
+            .stamp-fail { font-size: 2rem; }
+            .paper-note { font-size: 1.2rem; }
+            .slide-frame { overflow-y: auto; display: block; } /* Allow scroll */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame">
+        <div class="bg-grid"></div>
+        <div class="bg-vignette"></div>
+
+        <div class="header-section">
+            <div class="subtitle-tech">// STRATEGY SIMULATION</div>
+            <h1 class="main-title">ACQUISITION <span style="color: #444;">VS</span> RETENTION</h1>
+        </div>
+
+        <div class="comparison-container">
+            
+            <div class="strategy-col old">
+                <div class="stamp-fail">INEFFICIENT</div>
+                <h2 class="col-title">CARA LAMA</h2>
+                
+                <div class="flow-step">
+                    <i class="ri-user-search-line flow-icon"></i>
+                    <div class="flow-text">Cari Kreator Baru</div>
+                </div>
+                
+                <i class="ri-arrow-down-line arrow-down"></i>
+
+                <div class="flow-step">
+                    <i class="ri-gift-line flow-icon"></i>
+                    <div class="flow-text">Kirim Free Sample</div>
+                </div>
+
+                <i class="ri-arrow-down-line arrow-down"></i>
+
+                <div class="flow-step" style="border-color: var(--neon-red); background: rgba(255, 51, 51, 0.1);">
+                    <i class="ri-money-dollar-circle-line flow-icon"></i>
+                    <div class="flow-text" style="font-weight: bold; color: var(--neon-red);">COST TINGGI</div>
+                </div>
+            </div>
+
+            <div class="strategy-col new">
+                <h2 class="col-title">CARA ONTHETOK</h2>
+
+                <div class="flow-step">
+                    <i class="ri-group-line flow-icon"></i>
+                    <div class="flow-text">Kelola Kreator Lama (Database)</div>
+                </div>
+
+                <i class="ri-arrow-down-line arrow-down" style="color: var(--neon-green); opacity: 1;"></i>
+
+                <div class="flow-step">
+                    <i class="ri-megaphone-line flow-icon"></i>
+                    <div class="flow-text">Ajak Challenge / Campaign Baru</div>
+                </div>
+
+                <i class="ri-arrow-down-line arrow-down" style="color: var(--neon-green); opacity: 1;"></i>
+
+                <div class="result-box">
+                    <i class="ri-flashlight-fill"></i> ZERO SAMPLE COST
+                </div>
+            </div>
+
+        </div>
+
+        <div class="conclusion-section">
+            <div class="paper-note">
+                "Kreator lama adalah aset. Mereka sudah punya produk Anda. <br>
+                <span style="color: #d00; text-decoration: underline;">Aktifkan mereka kembali</span> tanpa biaya tambahan."
+            </div>
+        </div>
+
+        <div class="hud-footer">
+            SLIDE_05 // TACTICAL SHIFT
+        </div>
+    </div>
+
+</body>
+</html>

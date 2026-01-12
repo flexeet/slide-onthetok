@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Onthetok - Investigation Slide (Fixed Layout)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --neon-red: #ff3333;
+            --tape-yellow: #f0e68c;
+            --paper-white: #f5f5f5;
+            --text-main: #ffffff;
+            --font-head: 'Anton', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: #0d0d0d;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            font-family: var(--font-tech);
+            color: var(--text-main);
+        }
+
+        /* --- SLIDE CONTAINER --- */
+        .slide-frame {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- ATMOSPHERE & BACKGROUND --- */
+        .bg-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .bg-vignette {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, #000000 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .connection-line {
+            position: absolute;
+            top: 40%;
+            left: 45%;
+            width: 20vw;
+            height: 2px;
+            background: var(--neon-red);
+            transform: rotate(25deg);
+            opacity: 0.4;
+            z-index: 1; /* Di belakang konten */
+            box-shadow: 0 0 15px var(--neon-red);
+        }
+
+        /* --- MAIN CONTENT GRID --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 55% 45%;
+            flex-grow: 1; /* Mengisi sisa ruang selain footer */
+            padding: 4vw 6vw;
+            position: relative;
+            z-index: 10;
+            align-items: center; /* Vertikal center */
+            gap: 2rem;
+        }
+
+        /* --- LEFT COLUMN: TEXT --- */
+        .col-text {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: flex-start;
+            position: relative;
+            height: 100%;
+            /* Pastikan teks punya ruang sendiri dan tidak ditabrak */
+        }
+
+        /* Metadata Header */
+        .case-file {
+            font-family: var(--font-tech);
+            color: #888;
+            font-size: clamp(0.8rem, 1.5vw, 1.2rem);
+            letter-spacing: 3px;
+            border-bottom: 2px solid var(--neon-red);
+            padding-bottom: 8px;
+            margin-bottom: 2vh;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .case-file i { color: var(--neon-red); }
+
+        /* Main Title */
+        .title-huge {
+            font-family: var(--font-head);
+            font-size: clamp(3rem, 10vw, 8rem); /* Responsive clamp */
+            line-height: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            position: relative;
+            margin-bottom: 2vh; /* Jarak aman ke elemen bawah */
+            color: #fff;
+            text-shadow: 4px 4px 0px var(--neon-red);
+            z-index: 20; /* Pastikan di atas dekorasi */
+        }
+
+        /* Glitch Effect pada Title */
+        .title-huge::before {
+            content: attr(data-text);
+            position: absolute;
+            left: -2px;
+            text-shadow: 2px 0 blue; 
+            top: 0;
+            color: white;
+            background: var(--bg-dark);
+            overflow: hidden;
+            clip: rect(0, 900px, 0, 0); 
+            animation: glitch-anim 4s infinite linear alternate-reverse;
+        }
+
+        @keyframes glitch-anim {
+            0% { clip: rect(44px, 9999px, 56px, 0); }
+            5% { clip: rect(10px, 9999px, 80px, 0); }
+            100% { clip: rect(0, 0, 0, 0); }
+        }
+
+        /* Tape Element (Sekarang Block element, bukan absolute) */
+        .tape-wrapper {
+            margin-bottom: 3vh; /* Jarak aman ke teks bawah */
+            z-index: 20;
+        }
+
+        .tape-label {
+            background-color: var(--tape-yellow);
+            color: #000;
+            font-family: var(--font-head);
+            font-size: clamp(1.2rem, 2.5vw, 2.5rem);
+            padding: 10px 30px;
+            transform: rotate(-1.5deg);
+            display: inline-block;
+            box-shadow: 4px 4px 10px rgba(0,0,0,0.6);
+            clip-path: polygon(
+                0% 0%, 100% 0%, 100% 100%, 
+                98% 95%, 95% 100%, 92% 95%, 88% 100%, 85% 95%, 82% 100%, 
+                78% 95%, 75% 100%, 72% 95%, 68% 100%, 65% 95%, 62% 100%, 
+                58% 95%, 55% 100%, 52% 95%, 48% 100%, 45% 95%, 42% 100%, 
+                38% 95%, 35% 100%, 32% 95%, 28% 100%, 25% 95%, 22% 100%, 
+                18% 95%, 15% 100%, 12% 95%, 8% 100%, 5% 95%, 2% 100%, 0% 100%
+            );
+        }
+
+        .subtitle {
+            font-size: clamp(1rem, 1.5vw, 1.4rem);
+            color: #ccc;
+            max-width: 95%;
+            line-height: 1.5;
+            border-left: 4px solid var(--neon-red);
+            padding-left: 20px;
+            margin-bottom: 4vh; /* Jarak aman ke sticky note */
+        }
+
+        /* Sticky Note (Sekarang Relative Flow) */
+        /* Ini kuncinya: Sticky note tidak lagi absolute melayang, tapi punya tempat sendiri */
+        .sticky-note-wrapper {
+            position: relative;
+            display: inline-block;
+            margin-top: 10px;
+            transform: rotate(-3deg);
+            align-self: flex-start; /* Tetap di kiri */
+        }
+
+        .sticky-note {
+            background-color: var(--paper-white);
+            color: #222;
+            padding: 20px 25px;
+            font-family: var(--font-hand);
+            font-size: clamp(1.2rem, 1.8vw, 1.8rem);
+            font-weight: 700;
+            box-shadow: 5px 5px 15px rgba(0,0,0,0.4);
+            max-width: 400px;
+            line-height: 1.2;
+            border-bottom-right-radius: 40px 5px;
+        }
+
+        /* Efek Selotip pada Sticky Note */
+        .sticky-note::before {
+            content: '';
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            width: 30%;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateX(-50%) rotate(2deg);
+            border-left: 1px solid rgba(255,255,255,0.4);
+            border-right: 1px solid rgba(255,255,255,0.4);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* --- RIGHT COLUMN: VISUALS --- */
+        .col-visual {
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+        }
+
+        .evidence-container {
+            position: relative;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .evidence-photo {
+            position: relative;
+            width: 90%; 
+            max-width: 600px;
+            background: #fff;
+            padding: 10px 10px 40px 10px;
+            box-shadow: 10px 20px 40px rgba(0,0,0,0.8);
+            transform: rotate(3deg);
+            z-index: 5;
+            transition: transform 0.4s ease;
+        }
+
+        .evidence-photo:hover {
+            transform: rotate(0deg) scale(1.02);
+            z-index: 25;
+        }
+
+        .evidence-photo img {
+            width: 100%;
+            height: auto;
+            filter: grayscale(20%) contrast(120%);
+            border: 1px solid #ddd;
+            display: block;
+        }
+
+        .paperclip {
+            position: absolute;
+            top: -15px;
+            right: 20%;
+            width: 30px;
+            height: 80px;
+            border: 6px solid #888;
+            border-radius: 30px;
+            z-index: 20;
+            transform: rotate(5deg);
+            border-bottom: none;
+        }
+
+        .stamp {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            font-family: var(--font-head);
+            font-size: clamp(1.5rem, 3vw, 3rem);
+            color: var(--neon-red);
+            border: 4px solid var(--neon-red);
+            padding: 5px 15px;
+            transform: rotate(-12deg);
+            opacity: 0.85;
+            background-image: radial-gradient(#000 1px, transparent 0);
+            background-size: 4px 4px; 
+            pointer-events: none;
+        }
+
+        /* --- HUD FOOTER --- */
+        .hud-footer {
+            height: 50px;
+            background: rgba(0,0,0,0.8);
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3vw;
+            z-index: 100;
+            flex-shrink: 0;
+        }
+
+        .system-status {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: #0f0; 
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+        }
+
+        .blink { animation: blinker 1.5s linear infinite; }
+        @keyframes blinker { 50% { opacity: 0; } }
+
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame">
+        <div class="bg-grid"></div>
+        <div class="bg-vignette"></div>
+        <div class="connection-line"></div>
+
+        <div class="content-grid">
+            <div class="col-text">
+                <div class="case-file">
+                    <i class="ri-folder-shield-2-fill"></i>
+                    <span>CASE FILE: #OTT-2024 // TOP SECRET</span>
+                </div>
+
+                <h1 class="title-huge" data-text="ONTHETOK">ONTHETOK</h1>
+
+                <div class="tape-wrapper">
+                    <div class="tape-label">THE ULTIMATE TOOL</div>
+                </div>
+
+                <p class="subtitle">
+                    <span style="color: var(--neon-red); font-weight: bold;">[SYSTEM INITIALIZED]</span><br>
+                    Affiliate Management & Automation Protocol.<br>
+                    End-to-end solution for modern creators.
+                </p>
+
+                <div class="sticky-note-wrapper">
+                    <i class="ri-pushpin-fill" style="color: #d00; position: absolute; top: -15px; left: 45%; font-size: 1.5rem; z-index: 10;"></i>
+                    <div class="sticky-note">
+                        "Maksimalkan Aset Kreator, Hemat Biaya Sampel & Otomatisasi Administrasi."
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-visual">
+                <div class="evidence-container">
+                    <div class="evidence-photo">
+                        <div class="paperclip"></div>
+                        <img src="https://flxr2.com/ott/Galeri%20Onthetok/sample%20request%20dasboard.png" alt="Evidence Dashboard">
+                        <div class="stamp">SOLUSI</div>
+                        <div style="font-family: 'Caveat'; color: black; margin-top: 10px; text-align: center; font-size: 1.2rem; font-weight: bold;">
+                            Fig A: Tracking Dashboard
+                        </div>
+                    </div>
+                    
+                    <i class="ri-database-2-line" style="position: absolute; top: 0; right: 0; color: var(--neon-red); font-size: 3rem; opacity: 0.5;"></i>
+                    <i class="ri-fingerprint-line" style="position: absolute; bottom: 0; left: 0; color: var(--tape-yellow); font-size: 3rem; opacity: 0.5;"></i>
+                </div>
+            </div>
+        </div>
+
+        <div class="hud-footer">
+            <div class="system-status">
+                <span class="blink">●</span> SYSTEM ONLINE
+            </div>
+            <div style="font-size: 1.2rem; color: #555; display: flex; gap: 15px;">
+                <span>v.2.0.4</span>
+                <i class="ri-wifi-line" style="color: #fff;"></i>
+                <i class="ri-battery-charge-line" style="color: #fff;"></i>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

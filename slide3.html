@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 3 - What is Onthetok</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* --- COPY VARIABLES & RESET --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --neon-red: #ff3333;
+            --neon-green: #00e676; /* Warna Khas WA Neon */
+            --tape-yellow: #f0e68c;
+            --paper-white: #f5f5f5;
+            --font-head: 'Anton', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #0d0d0d;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; 
+            font-family: var(--font-tech);
+            color: #fff;
+        }
+
+        .slide-frame {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- BACKGROUND --- */
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 230, 118, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 230, 118, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0) 50%, rgba(0,0,0,0.2) 50%, rgba(0,0,0,0.2));
+            background-size: 100% 4px;
+            pointer-events: none;
+            z-index: 2;
+        }
+
+        /* --- MAIN LAYOUT --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            flex-grow: 1;
+            padding: 4vw 6vw;
+            gap: 4rem;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        /* --- LEFT COLUMN: DATA SPEC --- */
+        .col-data {
+            border-left: 2px solid var(--neon-green);
+            padding-left: 30px;
+            position: relative;
+        }
+
+        /* Decorative bracket */
+        .col-data::before {
+            content: '';
+            position: absolute;
+            top: 0; left: -2px; width: 20px; height: 2px;
+            background: var(--neon-green);
+        }
+        .col-data::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: -2px; width: 20px; height: 2px;
+            background: var(--neon-green);
+        }
+
+        .section-label {
+            color: var(--neon-green);
+            letter-spacing: 3px;
+            font-size: 1rem;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        h1.tech-title {
+            font-family: var(--font-head);
+            font-size: clamp(3rem, 6vw, 5rem);
+            line-height: 1;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+        }
+
+        .definition-box {
+            background: rgba(0, 230, 118, 0.1);
+            border: 1px solid var(--neon-green);
+            padding: 20px;
+            margin-bottom: 30px;
+            font-size: clamp(1rem, 1.5vw, 1.3rem);
+            line-height: 1.6;
+            color: #e0e0e0;
+            position: relative;
+        }
+
+        /* Tech corner decor */
+        .definition-box::after {
+            content: '';
+            position: absolute;
+            bottom: -5px; right: -5px;
+            width: 10px; height: 10px;
+            background: var(--neon-green);
+            box-shadow: 0 0 10px var(--neon-green);
+        }
+
+        .spec-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .spec-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+        }
+
+        .spec-icon {
+            color: var(--bg-dark);
+            background: var(--neon-green);
+            width: 30px; height: 30px;
+            display: flex; 
+            justify-content: center; 
+            align-items: center;
+            font-weight: bold;
+        }
+
+        .spec-text h3 {
+            color: var(--neon-green);
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+        }
+        .spec-text p {
+            color: #bbb;
+            font-size: 1rem;
+        }
+
+        /* Paper Note for Platform Info */
+        .paper-note {
+            margin-top: 40px;
+            background: var(--paper-white);
+            color: #222;
+            padding: 15px 25px;
+            transform: rotate(-2deg);
+            display: inline-block;
+            font-family: var(--font-hand);
+            font-size: 1.4rem;
+            font-weight: bold;
+            box-shadow: 3px 3px 10px rgba(0,0,0,0.5);
+            position: relative;
+        }
+        
+        .paper-note::before {
+            content: '';
+            position: absolute;
+            top: -10px; left: 50%;
+            width: 80px; height: 25px;
+            background: rgba(255,255,255,0.3);
+            border: 1px solid rgba(255,255,255,0.5);
+            transform: translateX(-50%);
+        }
+
+        /* --- RIGHT COLUMN: VISUAL HOLOGRAM --- */
+        .col-visual {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            height: 100%;
+        }
+
+        .hologram-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            aspect-ratio: 1/1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Spinning Circles */
+        .ring {
+            position: absolute;
+            border: 1px solid var(--neon-green);
+            border-radius: 50%;
+            opacity: 0.6;
+        }
+        .ring-1 { width: 100%; height: 100%; border-style: dashed; animation: spin 10s linear infinite; }
+        .ring-2 { width: 70%; height: 70%; border-width: 2px; border-left-color: transparent; border-right-color: transparent; animation: spin-rev 5s linear infinite; }
+        .ring-3 { width: 90%; height: 90%; border: 1px solid rgba(0,230,118, 0.2); }
+
+        /* Central Icon */
+        .wa-icon-large {
+            font-size: 8rem;
+            color: var(--neon-green);
+            text-shadow: 0 0 20px var(--neon-green);
+            z-index: 5;
+            animation: pulse 2s infinite ease-in-out;
+        }
+
+        /* Floating Badges */
+        .float-badge {
+            position: absolute;
+            background: #000;
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 5px 10px;
+            font-size: 0.9rem;
+            z-index: 6;
+        }
+        .fb-1 { top: 20%; right: 0; }
+        .fb-2 { bottom: 20%; left: 0; }
+
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        @keyframes spin-rev { 100% { transform: rotate(-360deg); } }
+        @keyframes pulse { 0%, 100% { opacity: 0.8; transform: scale(1); } 50% { opacity: 1; transform: scale(1.1); } }
+
+        /* --- FOOTER --- */
+        .hud-footer {
+            height: 50px;
+            background: rgba(0,0,0,0.9);
+            border-top: 1px solid #333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 3vw;
+            z-index: 100;
+        }
+
+        /* Responsive Fixes */
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; padding-top: 20px; gap: 2rem; overflow-y: auto; }
+            .hologram-container { max-width: 250px; }
+            .wa-icon-large { font-size: 5rem; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame">
+        <div class="bg-grid"></div>
+        <div class="bg-scanline"></div>
+
+        <div class="content-grid">
+            
+            <div class="col-data">
+                <span class="section-label">// SYSTEM DEFINITION</span>
+                <h1 class="tech-title">WHAT IS<br>ONTHETOK?</h1>
+                
+                <div class="definition-box">
+                    "Tools manajemen affiliate berbasis <strong>WhatsApp Automation</strong> untuk mengelola hubungan (Maintenance & Retention) antara Brand dan Kreator."
+                </div>
+
+                <div class="spec-list">
+                    <div class="spec-item">
+                        <div class="spec-icon">01</div>
+                        <div class="spec-text">
+                            <h3>CORE FOCUS</h3>
+                            <p>Reach Out Creator & Mengelola database (Existing).</p>
+                        </div>
+                    </div>
+                    <div class="spec-item">
+                        <div class="spec-icon">02</div>
+                        <div class="spec-text">
+                            <h3>PRIMARY GOAL</h3>
+                            <p>Efisiensi operasional & optimalisasi budget marketing.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="paper-note">
+                    <i class="ri-lock-2-fill"></i> Platform: WhatsApp (Personal & Aman)
+                </div>
+            </div>
+
+            <div class="col-visual">
+                <div class="hologram-container">
+                    <div class="ring ring-1"></div>
+                    <div class="ring ring-2"></div>
+                    <div class="ring ring-3"></div>
+                    
+                    <i class="ri-whatsapp-fill wa-icon-large"></i>
+
+                    <div class="float-badge fb-1">
+                        <i class="ri-check-double-line"></i> AUTOMATION READY
+                    </div>
+                    <div class="float-badge fb-2">
+                        <i class="ri-database-2-fill"></i> DATABASE SECURE
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="hud-footer">
+            <div style="color: var(--neon-green); font-size: 0.9rem; letter-spacing: 2px;">
+                <i class="ri-shield-check-fill"></i> SOLUTION VERIFIED
+            </div>
+            <div style="font-size: 1.2rem; color: #555;">
+                SLIDE_03 // INFO
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 9 - Reporting (Uniform Layout)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* --- RESET & VARIABLES --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --neon-amber: #ffab00; /* Warna Utama Slide Ini */
+            --neon-blue: #00f3ff;
+            --neon-green: #00e676;
+            --neon-red: #ff3333;
+            --tape-yellow: #f0e68c;
+            --font-head: 'Anton', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #000;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            font-family: var(--font-tech);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- SLIDE CONTAINER (Full Screen Layout) --- */
+        .slide-frame {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            background-color: var(--bg-dark);
+            overflow: hidden;
+            display: grid;
+            grid-template-rows: auto 1fr auto; /* Header - Content - Footer */
+        }
+
+        /* --- BACKGROUND --- */
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(255, 171, 0, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255, 171, 0, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, #000000 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- HEADER (SERAGAM DENGAN SLIDE 1-8) --- */
+        .header-section {
+            padding: 2vh 4vw;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--neon-amber);
+            background: rgba(0,0,0,0.6);
+            height: 12vh;
+        }
+
+        .header-title h1 {
+            font-family: var(--font-head);
+            font-size: 5vh;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            line-height: 1;
+        }
+        
+        .header-title span { color: var(--neon-amber); text-shadow: 0 0 15px var(--neon-amber); }
+        .header-sub { font-size: 2vh; color: #aaa; display: flex; align-items: center; gap: 10px; }
+
+        /* --- CONTENT GRID --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1.3fr; /* Kanan lebih lebar untuk visual 3D */
+            padding: 4vh 6vw;
+            gap: 5vw;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            height: 100%;
+        }
+
+        /* --- LEFT COLUMN: TEXT CONTENT --- */
+        .text-area {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 2vh;
+            height: 100%;
+        }
+
+        .section-label {
+            font-family: var(--font-head);
+            font-size: 3vh;
+            color: #fff;
+            margin-bottom: 1vh;
+        }
+
+        /* Analysis Box (Conversion) */
+        .analysis-box {
+            border-left: 4px solid var(--neon-blue);
+            background: rgba(0, 243, 255, 0.05);
+            padding: 1.5vh;
+            display: flex; flex-direction: column; gap: 0.5vh;
+        }
+        .analysis-title { font-size: 1.8vh; color: var(--neon-blue); font-weight: bold; display: flex; gap: 10px; align-items: center; }
+        .analysis-desc { font-size: 1.5vh; color: #ccc; }
+
+        /* Status List (Traffic Light System) */
+        .status-list {
+            display: flex; flex-direction: column; gap: 1vh;
+            background: rgba(0,0,0,0.3);
+            padding: 2vh;
+            border: 1px solid #333;
+        }
+
+        .status-header { font-size: 1.5vh; color: #888; margin-bottom: 1vh; letter-spacing: 1px; }
+
+        .status-item {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.6vh;
+            padding: 0.8vh;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .dot { width: 1.2vh; height: 1.2vh; border-radius: 50%; box-shadow: 0 0 5px currentColor; }
+        .dot-gray { color: #555; background: #555; box-shadow: none; }
+        .dot-yellow { color: var(--tape-yellow); background: var(--tape-yellow); }
+        .dot-blue { color: var(--neon-blue); background: var(--neon-blue); }
+        .dot-green { color: var(--neon-green); background: var(--neon-green); }
+        .dot-red { color: var(--neon-red); background: var(--neon-red); }
+
+        /* Validation Box */
+        .validation-box {
+            background: linear-gradient(90deg, rgba(255, 171, 0, 0.1), transparent);
+            border: 1px solid var(--neon-amber);
+            padding: 1.5vh;
+            margin-top: 1vh;
+            position: relative;
+            animation: pulseBorder 3s infinite;
+        }
+        .val-label {
+            position: absolute; top: -1vh; right: 1vh;
+            background: var(--neon-amber); color: #000;
+            font-weight: bold; font-size: 1.2vh; padding: 0.2vh 1vh;
+        }
+
+        /* --- RIGHT COLUMN: VISUAL 3D MONITOR --- */
+        .visual-area {
+            position: relative;
+            height: 100%;
+            perspective: 1000px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .monitor-screen {
+            width: 90%;
+            transform: rotateY(-10deg) rotateX(5deg); /* Efek Miring */
+            box-shadow: -20px 20px 60px rgba(0,0,0,0.8);
+            border: 2px solid #333;
+            background: #000;
+            position: relative;
+            z-index: 1;
+            transition: transform 0.5s;
+        }
+
+        .monitor-screen:hover {
+            transform: rotateY(0) rotateX(0) scale(1.02);
+            z-index: 20;
+        }
+
+        .dashboard-img { width: 100%; display: block; opacity: 0.95; }
+
+        /* Floating Stats */
+        .stat-card {
+            position: absolute;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid var(--neon-amber);
+            padding: 1vh 2vw;
+            color: var(--neon-amber);
+            font-family: var(--font-head);
+            font-size: 2.5vh;
+            box-shadow: 0 0 20px rgba(255, 171, 0, 0.2);
+            z-index: 10;
+            animation: float 4s ease-in-out infinite;
+        }
+
+        .stat-label { font-family: var(--font-tech); font-size: 1.2vh; color: #ccc; display: block; margin-bottom: -2px; }
+
+        .tape-live {
+            position: absolute; top: -1.5vh; left: 2vw;
+            background: var(--tape-yellow); color: #000;
+            padding: 0.5vh 2vw;
+            font-family: var(--font-hand); font-weight: bold;
+            font-size: 1.8vh;
+            z-index: 20;
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+            transform: rotate(-2deg);
+        }
+
+        /* --- FOOTER (SERAGAM DENGAN SLIDE 1-8) --- */
+        .hud-footer {
+            height: 6vh;
+            background: rgba(0,0,0,0.9);
+            border-top: 1px solid #333;
+            display: flex; align-items: center; justify-content: flex-end;
+            padding: 0 4vw; z-index: 100;
+            color: #555; font-size: 1.8vh;
+        }
+
+        /* Animations */
+        @keyframes pulseBorder { 0%, 100% { box-shadow: 0 0 5px rgba(255, 171, 0, 0.1); } 50% { box-shadow: 0 0 15px rgba(255, 171, 0, 0.3); } }
+        @keyframes float { 0%, 100% { transform: translateY(0) translateZ(20px); } 50% { transform: translateY(-15px) translateZ(20px); } }
+
+        /* Responsive */
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; overflow-y: auto; display: block; gap: 3vh; }
+            .visual-area { height: 300px; margin-top: 3vh; }
+            .monitor-screen { width: 100%; transform: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame">
+        <div class="bg-grid"></div>
+        <div class="bg-vignette"></div>
+
+        <div class="header-section">
+            <div class="header-title">
+                <h1>REPORTING <span>DATA</span></h1>
+            </div>
+            <div class="header-sub">
+                <i class="ri-bar-chart-grouped-line"></i> EVALUASI BERBASIS DATA
+            </div>
+        </div>
+
+        <div class="content-grid">
+            
+            <div class="text-area">
+                
+                <h2 class="section-label">PERFORMA CAMPAIGN</h2>
+
+                <div class="analysis-box">
+                    <div class="analysis-title"><i class="ri-percent-line"></i> CONVERSION RATE</div>
+                    <div class="analysis-desc">
+                        Analisa perbandingan jumlah pesan terkirim vs jumlah kreator yang join.
+                    </div>
+                </div>
+
+                <div class="status-list">
+                    <div class="status-header">// ACHIEVEMENT STATUS LOG</div>
+                    
+                    <div class="status-item">
+                        <div class="dot dot-gray"></div> No Response Yet <span style="margin-left:auto; color:#555;">(Wait)</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="dot dot-yellow"></div> Not Started <span style="margin-left:auto; color:#aaa;">(Pending)</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="dot dot-blue"></div> In Progress <span style="margin-left:auto; color:var(--neon-blue);">(Active)</span>
+                    </div>
+                    <div class="status-item" style="background: rgba(0, 230, 118, 0.1);">
+                        <div class="dot dot-green"></div> Completed <span style="margin-left:auto; color:var(--neon-green);">(Goal)</span>
+                    </div>
+                    <div class="status-item">
+                        <div class="dot dot-red"></div> Failed / Hit & Run <span style="margin-left:auto; color:var(--neon-red);">(Drop)</span>
+                    </div>
+                </div>
+
+                <div class="validation-box">
+                    <div class="val-label">STRATEGIC INSIGHT</div>
+                    <p style="margin: 0; font-size: 1.8vh; line-height: 1.4;">
+                        <strong style="color: var(--neon-amber);">Campaign Validation:</strong> <br>
+                        Mengetahui efektivitas tema campaign atau hadiah secara objektif.
+                    </p>
+                </div>
+            </div>
+
+            <div class="visual-area">
+                
+                <div class="stat-card" style="top: 15%; right: -2vw; animation-delay: 0s;">
+                    <span class="stat-label">CAMPAIGN STATUS</span>
+                    VALIDATED
+                </div>
+
+                <div class="stat-card" style="bottom: 15%; left: -4vw; border-color: var(--neon-green); color: var(--neon-green); animation-delay: 1.5s;">
+                    <span class="stat-label">SUCCESS RATE</span>
+                    88.4%
+                </div>
+
+                <div class="monitor-screen">
+                    <div class="tape-live">REPORT_VIEW.EXE</div>
+                    <img src="https://flxr2.com/ott/Galeri%20Onthetok/Menu%20Report.png" alt="Report Dashboard" class="dashboard-img">
+                    <div style="position: absolute; top:0; left:0; width:100%; height:100%; background: linear-gradient(rgba(255, 171, 0, 0.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 171, 0, 0.05) 1px, transparent 1px); background-size: 25px 25px; pointer-events: none;"></div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="hud-footer">
+            SLIDE_09 // MISSION DEBRIEF
+        </div>
+    </div>
+
+</body>
+</html>

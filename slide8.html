@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide 8 - Content Management (Fixed Fit)</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Caveat:wght@400;700&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+    
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+    <style>
+        /* --- RESET & GLOBAL --- */
+        :root {
+            --bg-dark: #1a1a1a;
+            --neon-purple: #d500f9;
+            --neon-blue: #00f3ff;
+            --neon-green: #00e676;
+            --tape-yellow: #f0e68c;
+            --font-head: 'Anton', sans-serif;
+            --font-tech: 'Share Tech Mono', monospace;
+            --font-hand: 'Caveat', cursive;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background-color: #000;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden; /* Kunci Scrollbar */
+            font-family: var(--font-tech);
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* --- SLIDE CONTAINER (AUTO FIT) --- */
+        .slide-frame {
+            position: relative;
+            width: 100vw; /* Paksa lebar penuh */
+            height: 100vh; /* Paksa tinggi penuh */
+            background-color: var(--bg-dark);
+            overflow: hidden; /* Mencegah elemen tercecer keluar */
+            display: grid;
+            grid-template-rows: auto 1fr auto; /* Header - Content - Footer */
+        }
+
+        /* --- BACKGROUND --- */
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(213, 0, 249, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(213, 0, 249, 0.05) 1px, transparent 1px);
+            background-size: 4vmin 4vmin; /* Responsive Grid Size */
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .bg-vignette {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: radial-gradient(circle at center, transparent 30%, #000000 100%);
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        /* --- HEADER (Ukuran Responsif) --- */
+        .header-section {
+            padding: 2vh 4vw;
+            z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid var(--neon-purple);
+            background: rgba(0,0,0,0.6);
+            height: 12vh; /* Tinggi fix relatif layar */
+        }
+
+        .header-title h1 {
+            font-family: var(--font-head);
+            font-size: 5vh; /* Font ikut tinggi layar */
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #fff;
+            line-height: 1;
+        }
+        
+        .header-title span { color: var(--neon-purple); text-shadow: 0 0 10px var(--neon-purple); }
+        
+        .header-sub { font-size: 2vh; color: #aaa; display: flex; align-items: center; gap: 10px; }
+
+        /* --- CONTENT GRID (LAYOUT UTAMA) --- */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 0.8fr 1.2fr;
+            padding: 4vh 6vw;
+            gap: 5vw;
+            align-items: center;
+            position: relative;
+            z-index: 10;
+            height: 100%; /* Isi sisa ruang */
+        }
+
+        /* --- LEFT COLUMN: INPUT SYSTEM --- */
+        .input-system {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .section-label {
+            color: var(--tape-yellow);
+            font-family: 'Anton';
+            font-size: 3vh;
+            margin-bottom: 2vh;
+            letter-spacing: 1px;
+        }
+
+        .input-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid #555;
+            padding: 2vh;
+            position: relative;
+            transform: rotate(-2deg);
+            transition: transform 0.3s;
+            max-width: 400px; /* Batas lebar agar tidak terlalu besar di layar ultrawide */
+        }
+
+        .input-card:hover { transform: rotate(0deg); }
+
+        .input-card img {
+            width: 100%;
+            height: auto;
+            max-height: 30vh; /* Batasi tinggi gambar */
+            object-fit: cover;
+            display: block;
+            border: 1px solid #333;
+            filter: grayscale(30%);
+        }
+
+        .card-desc {
+            margin-top: 1.5vh;
+            font-size: 2.5vh;
+            font-family: var(--font-head);
+            color: var(--tape-yellow);
+            display: flex; align-items: center; gap: 10px;
+        }
+        
+        .card-subtext { font-size: 1.8vh; color: #ccc; margin-top: 5px; line-height: 1.4; }
+
+        /* Connecting Arrow (Posisi Absolut Relatif ke Kolom Kiri) */
+        .connector-arrow {
+            position: absolute;
+            top: 50%; 
+            right: -3vw;
+            font-size: 6vh;
+            color: var(--neon-purple);
+            animation: pulseArrow 2s infinite;
+            z-index: 5;
+            transform: translateY(-50%);
+        }
+        @keyframes pulseArrow { 
+            0%, 100% { opacity: 0.5; right: -3vw; } 
+            50% { opacity: 1; right: -2vw; } 
+        }
+
+        /* --- RIGHT COLUMN: HUD --- */
+        .monitor-hud {
+            border: 2px solid var(--neon-purple);
+            background: rgba(0, 0, 0, 0.8);
+            padding: 3vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(213, 0, 249, 0.2);
+            height: auto;
+            max-width: 100%;
+        }
+
+        /* HUD Corners */
+        .monitor-hud::before { content: ''; position: absolute; top: -5px; left: -5px; width: 20px; height: 20px; border-top: 4px solid var(--neon-purple); border-left: 4px solid var(--neon-purple); }
+        .monitor-hud::after { content: ''; position: absolute; bottom: -5px; right: -5px; width: 20px; height: 20px; border-bottom: 4px solid var(--neon-purple); border-right: 4px solid var(--neon-purple); }
+
+        .hud-header {
+            display: flex; justify-content: space-between;
+            border-bottom: 1px solid #444; padding-bottom: 1vh; margin-bottom: 2vh;
+            color: var(--neon-purple); font-size: 1.8vh;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2vh;
+        }
+
+        .metric-box {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 1.5vh;
+            border-left: 4px solid #555;
+            transition: all 0.3s;
+        }
+        .metric-box:hover { background: rgba(213, 0, 249, 0.1); border-left-color: var(--neon-purple); }
+
+        .metric-label { font-size: 1.5vh; color: #aaa; text-transform: uppercase; margin-bottom: 0.5vh; }
+        .metric-value { font-size: 4vh; font-family: var(--font-head); color: #fff; line-height: 1; }
+
+        .update-badge {
+            margin-top: 3vh;
+            display: flex; justify-content: space-between; align-items: center;
+            font-size: 1.8vh; color: var(--neon-blue);
+        }
+
+        .stamp-verified {
+            position: absolute;
+            bottom: -2vh; right: -2vw;
+            border: 0.5vh solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 1vh 3vw;
+            font-family: var(--font-head);
+            font-size: 4vh;
+            transform: rotate(-10deg);
+            background: rgba(0,0,0,0.9);
+            box-shadow: 0 0 15px var(--neon-green);
+            z-index: 20;
+        }
+
+        /* --- FOOTER --- */
+        .hud-footer {
+            height: 6vh;
+            background: rgba(0,0,0,0.9);
+            border-top: 1px solid #333;
+            display: flex; align-items: center; justify-content: flex-end;
+            padding: 0 4vw; z-index: 100;
+            color: #555; font-size: 1.8vh;
+        }
+
+        /* RESPONSIVE MOBILE TWEAK */
+        @media (max-width: 900px) {
+            .content-grid { grid-template-columns: 1fr; padding: 2vh 6vw; gap: 2vh; overflow-y: auto; display: block; }
+            .input-system { margin-bottom: 4vh; align-items: center; }
+            .connector-arrow { display: none; } /* Hide arrow on mobile */
+            .monitor-hud { margin-bottom: 50px; }
+            .input-card { max-width: 80%; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="slide-frame">
+        <div class="bg-grid"></div>
+        <div class="bg-vignette"></div>
+
+        <div class="header-section">
+            <div class="header-title">
+                <h1>CONTENT <span>MANAGEMENT</span></h1>
+            </div>
+            <div class="header-sub">
+                <i class="ri-eye-2-line"></i> MONITORING & VERIFICATION
+            </div>
+        </div>
+
+        <div class="content-grid">
+            
+            <div class="input-system">
+                <h3 class="section-label">// SISTEM SATU PINTU</h3>
+                
+                <div class="input-card">
+                    <img src="https://flxr2.com/ott/Galeri%20Onthetok/gform.png" alt="GForm Submission">
+                    <div class="card-desc">
+                        <i class="ri-file-list-3-line"></i> SUBMISSION LOG
+                    </div>
+                    <div class="card-subtext">
+                        Integrasi GForm untuk submit <strong>Link Video</strong> & <strong>Spark Code</strong>.
+                    </div>
+                </div>
+
+                <i class="ri-arrow-right-double-line connector-arrow"></i>
+            </div>
+
+            <div class="monitor-hud">
+                <div class="hud-header">
+                    <span>TARGET: CONTENT_PERFORMANCE</span>
+                    <span style="animation: blinker 1s infinite;">● SCANNING...</span>
+                </div>
+
+                <div class="metrics-grid">
+                    <div class="metric-box">
+                        <div class="metric-label"><i class="ri-eye-fill"></i> VIEWS</div>
+                        <div class="metric-value">1.2M</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label"><i class="ri-heart-fill"></i> LIKES</div>
+                        <div class="metric-value">84.5K</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label"><i class="ri-chat-3-fill"></i> COMMENTS</div>
+                        <div class="metric-value">3,204</div>
+                    </div>
+                    <div class="metric-box">
+                        <div class="metric-label"><i class="ri-share-forward-fill"></i> SHARES</div>
+                        <div class="metric-value">15.1K</div>
+                    </div>
+                </div>
+
+                <div class="update-badge">
+                    <span><i class="ri-refresh-line"></i> AUTO-UPDATE: 4 x </span>
+                    <span style="color: #666;">ID: #OTT-8821</span>
+                </div>
+
+                <div class="stamp-verified">VERIFIED</div>
+            </div>
+
+        </div>
+
+        <div class="hud-footer">
+            SLIDE_08 // ANALYTICS CENTER
+        </div>
+    </div>
+
+    <style>
+        @keyframes blinker { 50% { opacity: 0; } }
+    </style>
+
+</body>
+</html>
